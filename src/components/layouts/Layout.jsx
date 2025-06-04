@@ -7,12 +7,13 @@ function Layout() {
   return (
     <div>
       {/* Main section */}
-      <main className="w-screen bg-gray-800">
+      <main className="w-screen min-h-screen bg-gray-800">
         <Header/>
         <Outlet />
         {/* Footer section below main */}
-        <Footer/>
       </main>
+      {/* Footer section */}
+        <Footer/>
     </div>
   );
 }
