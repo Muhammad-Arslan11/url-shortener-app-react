@@ -1,7 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Login from '../Login';
+import Login from '../Login.jsx';
 import Signup from '../Signup';
 
 function auth() {
@@ -22,13 +22,13 @@ function auth() {
             value="login"
             className="p-2 text-center cursor-pointer data-[state=active]:bg-gray-800 data-[state=active]:text-white "
           >
-            Account
+            Login
           </TabsTrigger>
           <TabsTrigger
             value="signup"
             className="p-2 text-center cursor-pointer data-[state=active]:bg-gray-800 data-[state=active]:text-white"
           >
-            Password
+            Signup
           </TabsTrigger>
         </TabsList>
         <TabsContent
