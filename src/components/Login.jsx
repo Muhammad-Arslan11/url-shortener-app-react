@@ -15,7 +15,9 @@ import * as Yup from "yup";
 import useFetch from "@/hooks/useFetch";
 import {login} from "../../db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {UrlState}  from '../UrlContext'; 
+import {useUrlState}  from "../UrlContext";
+
+
 function Login() {
   // const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -38,7 +40,7 @@ function Login() {
   };
 
   const {data, error, loading, fn: fnLogin} = useFetch(login, formData);
-  const [fetchUser] = UrlState();
+  const {fetchUser} = useUrlState();
 
   useEffect(()=>{
     if(error === null && data){

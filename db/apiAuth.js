@@ -7,15 +7,14 @@ export const login = async ({email, password})=>{
     })
 
     if(error){
-        throw new Error("an error occurred during login!", error.message);
-        return;
+       throw new Error(error.message || "An error occurred during login");
     }
     return data;
     
 }
 
 export async function getUserSession(){
-    const {data, error} = supabase.auth.getSession();
+    const {data, error} = await supabase.auth.getSession();
     if(!data.session){
         return null;
     }
@@ -26,11 +25,13 @@ export async function getUserSession(){
 }
 
 export async function signup({name, email, password, profile_pic}){
-  const fileName = `dp-${name.split(" ").join("-")}-${Math.random()}}`;
+ const fileName = `dp-${name.split(" ").join("-")}-${Math.random()}`;
+
  const {error: storageError} =  await supabase.storage.from("profile-pic").upload(fileName, profile_pic);
   
  if(storageError){
-    throw new Error(error.message);
+    throw new Error(storageError.message);
+
  }
 
  const {data, error} = await supabase.auth.signUp({
