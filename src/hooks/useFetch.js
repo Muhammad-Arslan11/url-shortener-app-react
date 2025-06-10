@@ -16,7 +16,7 @@ const useFetch = (cb, options = {}) => {
     } finally {
       setLoading(false);
     }
-  });
+  },[cb,options]);
 
   return {data, loading, error, fn};
 };

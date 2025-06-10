@@ -9,9 +9,10 @@ function UrlContext({children}) {
 
    const isAuthenticated = user?.role === "authenticated";
 
-   useEffect(()=>{
-    fetchUser();
-   }, [fetchUser])
+  useEffect(() => {
+  if (!user) fetchUser();
+}, [fetchUser, user]);
+
 
   return <Context.Provider value={{user, fetchUser, loading, isAuthenticated}}>
     {children}

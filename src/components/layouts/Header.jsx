@@ -16,15 +16,15 @@ import {
 } from "@/components/ui/avatar.jsx";
 import { LinkIcon, LogOut } from "lucide-react";
 import { useUrlState } from "@/UrlContext";
-import {logout} from '../../../db/apiAuth';
-import useFetch from '../../hooks/useFetch';
-import {BarLoader} from 'react-spinners';
+import { logout } from "../../../db/apiAuth";
+import useFetch from "../../hooks/useFetch";
+import { BarLoader } from "react-spinners";
 
 function Header() {
   const navigate = useNavigate();
-  const {user, fetchUser} = useUrlState();
-  const {loading, fn: fnLogout} = useFetch(logout);
- 
+  const { user, fetchUser } = useUrlState();
+  const { loading, fn: fnLogout } = useFetch(logout);
+
   return (
     <>
       <nav className="mx-6 py-12 flex justify-between items-center">
@@ -40,30 +40,39 @@ function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger className="rounded-full outline-none overflow-hidden">
                 <Avatar className="w-12 h-12 mr-[10px]">
-                  <AvatarImage  src={user?.user_metadata?.profile_pic} className="w-full h-full object-cover" />
-                  <AvatarFallback >{user?.user_metadata?.name}</AvatarFallback>
+                  <AvatarImage
+                    src={user?.user_metadata?.profile_pic}
+                    className="w-full h-full object-cover"
+                  />
+                  <AvatarFallback>{user?.user_metadata?.name}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="">
-                  <span>
-                    <LinkIcon className="mr-2 h-4 w-4" />
-                  </span>
-                   Links
-                </DropdownMenuItem>
-                 <DropdownMenuItem className="text-red-400">
-                  <span onClick={fnLogout().then(()=> navigate('/'))}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                  </span>
+                <Link to='/dashboard'>
+                  <DropdownMenuItem className="">
+                    <span>
+                      <LinkIcon className="mr-2 h-4 w-4" />
+                    </span>
+                    Links
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem
+                  className="text-red-400"
+                  onClick={async () => {
+                    await fnLogout();
+                    navigate("/");
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
         </div>
-          {loading &&  <BarLoader width={"100%"} color='#36d7b7' />}
+        {loading && <BarLoader width={"100%"} color="#36d7b7" />}
       </nav>
     </>
   );
