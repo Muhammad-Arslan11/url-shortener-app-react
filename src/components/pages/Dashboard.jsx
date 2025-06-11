@@ -8,6 +8,7 @@ import { useUrlState } from "@/UrlContext";
 import useFetch from "@/hooks/useFetch";
 import { getUrls } from "../../../db/apiUrl";
 import { getUrlClicks } from "../../../db/urlClicks";
+import LinkCard from '../LinkCard';
 
 function Dashboard() {
   const [searchValue, setSearchValue] = useState("");
@@ -17,12 +18,13 @@ function Dashboard() {
     loading,
     error,
     data: urls,
-    fn: fnUrls,
+    fn: fetchUrls,
   } = useFetch(getUrls, user?.id);
+
   const {
     loading: clickLoading,
-    data: urlClicks,
-    fn: fnClick,
+    data: clicks,
+    fn: fetchClick,
   } = useFetch(
     getUrlClicks,
     urls?.map((url) => url.id)
@@ -30,13 +32,13 @@ function Dashboard() {
 
  useEffect(() => {
   if (user?.id) {
-    getUrls();
+    fetchUrls();
   }
 }, [user?.id]);
 
 
   useEffect(() => {
-    if (urls?.length) fnClick();
+    if (urls?.length) fetchClick();
   }, [urls?.length]);
 
   const filterUrls = urls?.filter((url) => {
@@ -56,7 +58,7 @@ function Dashboard() {
             <CardTitle>Total Links Created</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>0</p>
+            <p>{urls?.length  || "0"}</p>
           </CardContent>
         </Card>
         <Card className=" bg-gray-800">
@@ -64,7 +66,7 @@ function Dashboard() {
             <CardTitle>Total Links Visited</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>0</p>
+            <p>{clicks?.length  || "0"}</p>
           </CardContent>
         </Card>
       </div>
@@ -83,7 +85,8 @@ function Dashboard() {
 
         <Filter className="absolute top-2 right-2 p-1 " />
       </div>
-      {error && <Error message={error.message}/>}
+    {error && <Error message={error.message}/>}
+    {(filterUrls || []).map((url, index)=><LinkCard key={index} url={url} fnUrl={fetchUrls}/>)}
     </>
   );
 }
