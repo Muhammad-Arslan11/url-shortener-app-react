@@ -86,7 +86,7 @@ function Dashboard() {
         <Filter className="absolute top-2 right-2 p-1 " />
       </div>
     {error && <Error message={error.message}/>}
-    {(filterUrls || []).map((url, index)=><LinkCard key={index} url={url} fnUrl={fetchUrls}/>)}
+    {(filterUrls || []).map((url, index)=><LinkCard key={index} url={url} fetchUrls={fetchUrls}/>)}
     </>
   );
 }
