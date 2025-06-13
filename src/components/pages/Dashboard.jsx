@@ -20,6 +20,7 @@ function Dashboard() {
     data: urls,
     fn: fetchUrls,
   } = useFetch(getUrls, user?.id);
+  // console.log(urls);
 
   const {
     loading: clickLoading,

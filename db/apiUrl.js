@@ -30,7 +30,7 @@ export async function getUrls(user_id) {
 
 
 export async function deleteUrls(id) {
-  const response = await fetch('https://llwtyftxhcmbktcixqzs.functions.supabase.co/functions/v1/swift-handler', {
+  const response = await fetch('http://localhost:3000/delete-url', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,5 +46,6 @@ export async function deleteUrls(id) {
 
   return result.data || [];
 }
+
 
  
