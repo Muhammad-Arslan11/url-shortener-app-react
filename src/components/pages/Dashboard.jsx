@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import { Filter } from "lucide-react";
 import { useUrlState } from "@/UrlContext";
@@ -9,6 +8,7 @@ import useFetch from "@/hooks/useFetch";
 import { getUrls } from "../../../db/apiUrl";
 import { getUrlClicks } from "../../../db/urlClicks";
 import LinkCard from '../LinkCard';
+import CreateLink from "../CreateLink";
 
 function Dashboard() {
   const [searchValue, setSearchValue] = useState("");
@@ -73,7 +73,7 @@ function Dashboard() {
       </div>
       <div className="flex justify-between m-2 ml-4 mr-5">
         <h1 className="text-4xl font-extrabold">My Links</h1>
-        <Button>Create Links</Button>
+        <CreateLink/>
       </div>
       <div className="relative">
         <Input
@@ -87,7 +87,7 @@ function Dashboard() {
         <Filter className="absolute top-2 right-2 p-1 " />
       </div>
     {error && <Error message={error.message}/>}
-    {(filterUrls || []).map((url, index)=><LinkCard key={index} url={url} fetchUrls={fetchUrls}/>)}
+    {(urls || []).map((url, index)=><LinkCard key={index} url={url} fetchUrls={fetchUrls}/>)}
     </>
   );
 }
