@@ -1,3 +1,4 @@
+import {UAParser} from 'ua-parser-js';
 import supabase, { supabaseUrl } from './supabase';
 
 export async function getUrls(user_id) {
@@ -5,7 +6,7 @@ export async function getUrls(user_id) {
     .from("urls")
     .select("*")
     .eq("user-id", user_id);
-    // console.log("Url data", data);
+  // console.log("Url data", data);
 
   if (error) {
     throw new Error(`Unable to load URLs: ${error.message}`);
@@ -29,7 +30,7 @@ export async function getUrls(user_id) {
 // }
 
 
-export async function deleteUrls(id) {
+export async function deleteUrl(id) {
   const response = await fetch('http://localhost:3000/delete-url', {
     method: 'POST',
     headers: {
@@ -47,29 +48,63 @@ export async function deleteUrls(id) {
   return result.data || [];
 }
 
-export async function createUrl({title, long_url, custom_url, user_id}, qr_code) {
-  const shortUrl = Math.random().toString(36).substring(2,8);
+export async function createUrl({ title, long_url, custom_url, user_id }, qr_code) {
+  const shortUrl = Math.random().toString(36).substring(2, 8);
   const fileName = `dp-${shortUrl}`;
 
- const {error: storageError} =  await supabase.storage.from("qr").upload(fileName, profile_pic);
- if (storageError) {
-   throw new Error(`Unable to load URLs: ${error.message}`);
- }
+  const { error: storageError } = await supabase.storage.from("qr").upload(fileName, profile_pic);
+  if (storageError) {
+    throw new Error(`Unable to load URLs: ${error.message}`);
+  }
 
- const qr  = `${supabaseUrl}/storage/v1/object/public/profile-pic/${fileName}`;
- const {data, error} = await supabase.from('urls').insert([
-  {
-    title, 
-    "original-url": long_url, 
-    "custom-url": custom_url || null, 
-    user_id,
-    qr_code
-  },
- ]).select();
+  const qr = `${supabaseUrl}/storage/v1/object/public/profile-pic/${fileName}`;
+  const { data, error } = await supabase.from('urls').insert([
+    {
+      title,
+      "original-url": long_url,
+      "custom-url": custom_url || null,
+      user_id,
+      qr_code
+    },
+  ]).select();
 
 
   return data || [];
 }
 
 
- 
+
+export async function getLongUrl(id) {
+  const { data, error } = await supabase
+    .from("urls")
+    .select("id, original-url")
+    .or(`short-url.eq.${id}, custom-url.eq.${id}`)
+    .single();
+  // console.log("Url data", data);
+
+  if (error) {
+    throw new Error(`Unable to load Long URL: ${error.message}`);
+  }
+
+  return data || [];
+}
+
+
+export async function getUrl({id, user_id}) {
+  const { data, error } = await supabase
+    .from("urls")
+    .select("*")
+    .eq("id", id)
+    .eq("user-id", user_id)
+    .single();
+
+  if (error) {
+    throw new Error(`short URL not found: ${error.message}`);
+  }
+
+  return data || [];
+}
+
+
+
+

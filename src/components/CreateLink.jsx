@@ -20,11 +20,13 @@ import { createUrl } from "../../db/apiUrl";
 import useFetch from "@/hooks/useFetch";
 
 function CreateLink() {
+
+
   const { user } = useUrlState();
   const navigate = useNavigate();
+  const ref = useRef();
   const [searchParams, setSearchParams] = useSearchParams();
   const longLink = searchParams.get("createNew");
-  const ref = useRef();
 
   const [errors, setErrors] = useState({});
   const [formValues, setFormValues] = useState({
@@ -85,57 +87,61 @@ function CreateLink() {
 
   return (
     <>
-      <div>
-            <Dialog
-      defaultOpen={longLink}
-      onOpenChange={(res) => {
-        if (!res) setSearchParams({});
-      }}
-    >
-          <DialogTrigger asChild>
-            <Button variant="destructive">Create Link</Button>
-          </DialogTrigger>
+ <div>
+      <Dialog
+        defaultOpen={longLink}
+        onOpenChange={(res) => {
+          if (!res) setSearchParams({});
+        }}
+      >
+        <DialogTrigger asChild>
+          <Button variant="destructive">Create Link</Button>
+        </DialogTrigger>
 
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="font-bold text-2xl">
-                Create New
-              </DialogTitle>
-            </DialogHeader>
-          {formValues?.longUrl && (<QRCode value={formValues?.longUrl} size={250} ref={ref}/>)}
+        <DialogContent className="sm:max-w-md bg-gray-900 text-white">
+          <DialogHeader>
+            <DialogTitle className="font-bold text-2xl">Create New</DialogTitle>
+          </DialogHeader>
+          {formValues?.longUrl && <QRCode value={formValues?.longUrl} size={250} ref={ref} />}
 
+          <Input
+            id="title"
+            placeholder="Short link title"
+            value={formValues.title}
+            onChange={handleChange}
+            className="text-white w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-gray-800"
+          />
+          {errors.title && <Error message={errors.title} />}
+
+          <Input
+            id="longUrl"
+            placeholder="Enter your long link"
+            value={formValues.longUrl}
+            onChange={handleChange}
+            className="text-white w-full mt-2 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-gray-800"
+          />
+          {errors.longUrl && <Error message={errors.longUrl} />}
+
+          <div className="flex items-center gap-2 mt-2">
+            <Card>trimrr.in</Card>
             <Input
-              id="title"
-              placeholder="short link title"
-              value={formValues.title}
+              id="customUrl"
+              placeholder="Enter your custom link (optional)"
+              value={formValues.customUrl}
               onChange={handleChange}
+              className="text-white border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-gray-800"
             />
-              {errors.title && <Error message={errors.title} />}
-            <Input
-              id="longUrl"
-              placeholder="enter your looong link"
-              value={formValues.longUrl}
-              onChange={handleChange}
-            />
-           {errors.longUrl && <Error message={errors.longUrl} />}
-            <div className="flex items-center gap-2">
-              <Card>trimrr.in</Card>
-              <Input
-                id="customUrl"
-                placeholder="enter your custom link(optional)"
-                value={formValues.customUrl}
-                onChange={handleChange}
-              />
-             {error && <Error message={errors.message} />}
-              <DialogFooter className="sm:justify-start">
-                <Button type="button" onClick={createNewLink}>
-                   {loading ? <BeatLoader size={10} color="white" /> : "Create"}
-                </Button>
-              </DialogFooter>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
+            {errors.message && <Error message={errors.message} />}
+          </div>
+
+          <DialogFooter className="sm:justify-start mt-4">
+            <Button type="button" onClick={createNewLink}>
+              {loading ? <BeatLoader size={10} color="white" /> : "Create"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
     </>
   );
 }

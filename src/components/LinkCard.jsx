@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import useFetch from "@/hooks/useFetch";
-import { deleteUrls } from "../../db/apiUrl";
+import { deleteUrl } from "../../db/apiUrl";
 import { BeatLoader } from "react-spinners";
 
 function LinkCard({ url, fetchUrls }) {
@@ -34,7 +34,7 @@ function LinkCard({ url, fetchUrls }) {
   };
 
 
-  const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrls, url['user-id']);
+  const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl, url['user-id']);
 
 
   return (
@@ -64,7 +64,7 @@ function LinkCard({ url, fetchUrls }) {
         <Button
           variant="ghost"
           onClick={() =>
-            navigator.clipboard.writeText(`https://trimrr.in/${url['short_url']}`)
+            navigator.clipboard.writeText(`https://trimrr.in/${url['short-url']}`)
           }
         >
           <Copy />
